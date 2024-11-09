@@ -78,7 +78,7 @@
                                     <p class="text-sm font-bold leading-none text-slate-500">Role</p> <!-- Kolom Role -->
                                 </th>
                                 <th class="p-4 border border-slate-200 bg-slate-50">
-                                    <p class="text-sm font-bold leading-none text-slate-500">Aksi</p>
+                                    <p class="text-sm text-center font-bold leading-none text-slate-500">Aksi</p>
                                 </th>
                             </tr>
                         </thead>
@@ -122,7 +122,7 @@
                                                     'title' => 'Warga',
                                                     'url' => route('warga.destroy', $warga->id),
                                                     'class' => 'ml-2 inline-block px-3 py-1 text-sm font-bold bg-red-500 text-white rounded hover:bg-red-600
-                                                                                                                                                                sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 transition duration-300',
                                                     'id' => $warga->id,
                                                 ]) <!-- Tombol Hapus -->
 
@@ -133,7 +133,9 @@
                                                     @csrf
                                                     @method('PUT') <!-- Pastikan ini adalah PUT -->
                                                     <select name="role" required
-                                                        onchange="document.getElementById('roleForm').submit()">
+                                                    class=" text-center  inline-block px-3 py-1 text-sm font-bold bg-yellow-500 text-white rounded
+                                                     transition duration-300"
+                                                                                    onchange="document.getElementById('roleForm').submit()">
                                                         @foreach ($roles as $role)
                                                             <option value="{{ $role->name }}"
                                                                 {{ $warga->hasRole($role->name) ? 'selected' : '' }}>

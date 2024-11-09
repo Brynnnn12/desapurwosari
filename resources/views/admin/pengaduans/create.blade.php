@@ -10,7 +10,7 @@
     x-transition:leave-end="opacity-0 translate-y-4"
     class="fixed  inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-xs sm:max-w-xl ml-10">
-        <h2 class="text-lg font-semibold mb-4">Form Pengaduan</h2>
+        <h2 class="text-lg font-semibold mb-4 border-b ">Form Pengaduan</h2>
         <form action="{{ route('pengaduans.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <textarea name="isi_aduan" required class="w-full h-24 border border-gray-300 rounded p-2"

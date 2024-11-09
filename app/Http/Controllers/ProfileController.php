@@ -18,8 +18,13 @@ class ProfileController extends Controller
     }
     public function edit()
     {
-        // Mengambil data pengguna yang sedang login
         $user = Auth::user();
+
+        // Pastikan pengguna hanya dapat mengedit profil mereka sendiri
+        if (!$user) {
+            return redirect()->route('auth.login')->with('error', 'Silakan login untuk mengedit profil.');
+        }
+
         return view('admin.profile.edit', compact('user'));
     }
 

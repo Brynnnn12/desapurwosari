@@ -47,16 +47,32 @@ class RoleController extends Controller
 
     return view('admin.authorize.roles.edit', compact('role', 'permissions')); // Kirim ke view
 }
-public function update(Request $request,Role  $role)
+public function update(Request $request, $id)
 {
-
-    $role->update([
-        'name' => $request->name
+    // Validasi input
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'permissions' => 'array',
+        'permissions.*' => 'exists:permissions,id', // Pastikan setiap permission valid
     ]);
-    $permissions = Permission::whereIn('id', $request->permissions)->pluck('name');
 
-    $role->syncPermissions($permissions);
-    return redirect()->route('roles.index')->with('success', 'Role berhasil diperbarui.');
+    // Temukan role yang akan diupdate
+    $role = Role::findOrFail($id);
+
+    // Update nama role
+    $role->name = $validatedData['name'];
+    $role->save();
+
+    // Sync permissions
+    if (isset($validatedData['permissions'])) {
+        $role->syncPermissions($validatedData['permissions']);
+    } else {
+        // Jika tidak ada permission yang dipilih, hapus semua permission yang ada
+        $role->syncPermissions([]);
+    }
+
+    // Redirect ke halaman sebelumnya dengan pesan sukses
+    return redirect()->route('roles.index')->with('success', 'Role berhasil diperbarui!');
 }
 
 

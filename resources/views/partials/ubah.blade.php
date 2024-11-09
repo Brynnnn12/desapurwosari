@@ -1,11 +1,10 @@
 <div>
-    <form
-        action="{{ route('surat_pengantars.updateStatus', $suratPengantar->id) }}"
-        method="POST" id="statusForm-{{ $suratPengantar->id }}">
+    <form action="{{ route('surat_pengantars.updateStatus', $suratPengantar->id) }}" method="POST"
+        id="statusForm-{{ $suratPengantar->id }}">
         @csrf
         @method('PATCH')
         <select name="status" id="statusSelect-{{ $suratPengantar->id }}" class="ml-2 px-2 py-1 bg-gray-200 rounded">
-            <option value="" disabled>Status</option>
+            <option value="">Pilih Status</option>
             <option value="disetujui" {{ $suratPengantar->status === 'disetujui' ? 'selected' : '' }}>
                 Disetujui
             </option>
@@ -24,7 +23,7 @@
             const suratId = this.id.split('-')[1];
             const selectedValue = this.value;
 
-            console.log("Selected Value Changed:", selectedValue); // Debugging log
+            // console.log("Selected Value Changed:", selectedValue); // Debugging log
 
             Swal.fire({
                 title: 'Apakah Anda yakin?',
@@ -37,10 +36,12 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    console.log("Submitting form with ID: ", 'statusForm-' + suratId); // Log sebelum submit
+                    // console.log("Submitting form with ID: ", 'statusForm-' +
+                    // suratId); // Log sebelum submit
                     document.getElementById('statusForm-' + suratId).submit();
                 } else {
-                    console.log("Change canceled. Reverting to previous value:", previousValue); // Log ketika dibatalkan
+                    // console.log("Change canceled. Reverting to previous value:",
+                    // previousValue); // Log ketika dibatalkan
                     this.value = previousValue; // Kembalikan ke nilai sebelumnya
                 }
             });

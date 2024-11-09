@@ -3,6 +3,7 @@
 @section('content')
 
     <div class="mx-auto content ml-12 transform ease-in-out duration-500 pt-20 px-2 md:px-5 pb-4">
+        @include('partials.gagal')
         @php
             $breadcrumbs = [['name' => 'Surat Pengantar', 'url' => route('surat_pengantars.index')]];
         @endphp
@@ -15,17 +16,17 @@
 
         <div class="flex justify-between items-center mb-6">
             <button @click="open = true"
-                class="inline-block  px-2 py-1 text-sm font-bold bg-blue-500 text-white rounded hover:bg-blue-600
-                       sm:px-3 sm:py-1.5 sm:text-sm md:px-4 md:py-2 md:text-md">
-                Surat Pengantar Baru
+                class="inline-block  pr-4 h-8 pl-4  px-2 py-1 text-xs font-semibold sm:font-bold bg-blue-500 text-white rounded hover:bg-blue-600
+                       sm:px-3 sm:py-1.5  md:px-4 md:py-2 ">
+                Surat Baru
             </button>
 
 
             <div class="ml-3 ">
-                <div class="w-full max-w-sm min-w-[200px] relative">
+                <div class="w-50   relative">
                     <form action="{{ route('surat_pengantars.index') }}" method="GET" class="flex items-center">
                         <input type="text" name="search"
-                            class="bg-white w-full pr-10 h-8 pl-2  py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-xs border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                            class="bg-white  pr-4 h-8 pl-2  py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-xs border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
                             placeholder="Cari surat pengantar..." value="{{ request()->get('search') }}" />
                         <button type="submit"
                             class="absolute h-6 w-6 right-2 top-1.5 my-auto flex items-center justify-center bg-white rounded">
@@ -182,7 +183,7 @@
                                                 'title' => 'Surat Pengantar',
                                                 'url' => route('surat_pengantars.destroy', $suratPengantar->id),
                                                 'class' => 'ml-2 inline-block px-3 py-1 text-sm font-bold bg-red-500 text-white rounded hover:bg-red-600
-                                                                                                                                                                                                                                                                                                                                                                                sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 transition duration-300',
                                                 'id' => $suratPengantar->id, // Kirimkan ID di sini
                                             ])
 

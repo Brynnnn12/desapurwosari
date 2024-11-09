@@ -44,11 +44,11 @@
                                 <td class="p-4">{{ $permission->name }}</td>
                                 <td class="p-4 text-center">
                                     <div class="flex justify-center space-x-2">
-                                        <button @click="edit = true; permission = @js($permission)"
+                                        <button
+                                            @click="edit = true; permission = { id: {{ $permission->id }}, name: '{{ $permission->name }}', roles: @json($permission->roles->pluck('id')->toArray()) };"
                                             class="px-3 py-1 text-sm text-white bg-yellow-500 rounded hover:bg-yellow-600">
                                             Edit
-                                        </button>
-                                        @include('partials.hapus', [
+                                        </button> @include('partials.hapus', [
                                             'title' => 'Permission',
                                             'url' => route('permissions.destroy', $permission->id),
                                             'class' =>
@@ -138,7 +138,6 @@
         </div>
     </div>
 
-    <!-- Popup Form Edit -->
     <div x-show="edit" x-transition:enter="transition ease-out duration-300 transform"
         x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-200 transform" x-transition:leave-start="opacity-100 translate-y-0"
@@ -146,13 +145,12 @@
         class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-xs sm:max-w-xl ml-10">
             <h4 class="text-lg font-bold text-gray-800">Edit Permission</h4>
-            <form action="{{ route('permissions.update', $permission->id) }}" method="POST">
+            <form :action="`{{ route('permissions.update', '') }}/${permission.id}`" method="POST">
                 @csrf
-                @method('PUT') <!-- This is crucial for sending a PUT request -->
+                @method('PUT')
                 <div class="mb-4">
                     <label for="edit_permission" class="block text-sm font-semibold text-gray-700">Nama Permission</label>
-                    <input type="text" name="permission" id="edit_permission"
-                        value="{{ old('permission', $permission->name) }}"
+                    <input type="text" name="permission" id="edit_permission" x-model="permission.name"
                         class="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-500"
                         placeholder="Masukkan nama permission" required>
 
@@ -163,14 +161,18 @@
 
                 <div class="mb-4">
                     <label for="roles" class="block text-sm font-semibold text-slate-700">Pilih Role</label>
-                    <select id="select-role" name="roles[]" multiple placeholder="Pilih role..."
+                    <select id="select-role" name="roles[]" multiple x-model="permission.roles" placeholder="Pilih role..."
                         class="block w-full rounded-sm cursor-pointer focus:outline-none" autocomplete="off"
                         x-init="new TomSelect($el, {
                             maxItems: 3,
                             placeholder: 'Select roles...',
+                            onChange: (values) => {
+                                permission.roles = values;
+                                console.log(permission.roles); // Debugging
+                            }
                         })">
                         @foreach ($roles as $role)
-                            <option value="{{ $role->id }}" {{ $permission->hasRole($role->name) ? 'selected' : '' }}>
+                            <option value="{{ $role->id }}" @if ($permission->roles->contains($role->id)) selected @endif>
                                 {{ $role->name }}
                             </option>
                         @endforeach
@@ -180,22 +182,6 @@
                         <span class="text-red-500 text-xs">{{ $message }}</span>
                     @enderror
                 </div>
-                {{-- <div>
-                    <label for="permission">Permission:</label>
-                    <input type="text" name="permission" value="{{ old('permission', $permission->name) }}" required>
-                </div>
-
-                <div>
-                    <label for="roles">Roles:</label>
-                    <select name="roles[]" multiple>
-                        @foreach ($roles as $role) <!-- Assuming you have roles passed to the view -->
-                            <option value="{{ $role->id }}" {{ $permission->hasRole($role->name) ? 'selected' : '' }}>
-                                {{ $role->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div> --}}
-
                 <div class="flex gap-2">
                     <div class="mt-2 bg-green-500 rounded-lg">
                         <button type="submit"
@@ -211,7 +197,6 @@
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 @endsection

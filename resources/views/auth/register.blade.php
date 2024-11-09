@@ -11,7 +11,7 @@
 </head>
 
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
-    <div class="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
+    <div class="min-h-screen flex items-center justify-center w-full dark:bg-gray-950 p-6 sm:p-0">
         <div class="bg-white w-full dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md">
             @include('partials.alert')
             @include('partials.gagal')

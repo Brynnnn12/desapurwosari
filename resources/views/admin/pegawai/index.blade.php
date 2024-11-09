@@ -14,11 +14,12 @@
         </div>
 
         <div class="flex justify-between items-center mb-6">
+          <div>
             <div class="w-full max-w-sm min-w-[200px] relative">
                 <form action="{{ route('pegawai.index') }}" method="GET" class="flex items-center">
                     <input type="text" name="search"
                         class="bg-white w-full pr-10 h-8 pl-2 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-xs border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                        placeholder="Cari admin..." value="{{ request()->get('search') }}" />
+                        placeholder="Cari pegawai..." value="{{ request()->get('search') }}" />
                     <button type="submit"
                         class="absolute h-6 w-6 right-2 top-1.5 my-auto flex items-center justify-center bg-white rounded">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -29,6 +30,7 @@
                     </button>
                 </form>
             </div>
+        </div>
         </div>
 
         <div>
@@ -43,7 +45,8 @@
                     </div>
                 @endif
             @else
-                <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 shadow-md rounded-lg bg-clip-border">
+                <div
+                    class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 shadow-md rounded-lg bg-clip-border">
                     <table class="w-full text-left table-auto border min-w-max">
                         <thead>
                             <tr>
@@ -68,7 +71,7 @@
                                 <th class="p-4 border border-slate-200 bg-slate-50">
                                     <p class="text-sm font-bold leading-none text-slate-500">Role</p>
                                 </th>
-{{--
+                                {{--
                                 <th class="p-4 border border-slate-200 bg-slate-50">
                                     <p class="text-sm font-bold leading-none text-slate-500">Aksi</p>
                                 </th> --}}
@@ -76,53 +79,44 @@
                         </thead>
                         <tbody>
                             @php
-        $nomorUrut = 1; // Inisialisasi nomor urut
-    @endphp
+                                $nomorUrut = 1; // Inisialisasi nomor urut
+                            @endphp
 
-                            @foreach ($admins as $index => $admin)
-                                @if (!$admin->roles->contains('name', 'user')) <!-- Pastikan admin bukan admin -->
+                            @foreach ($admins as $admin)
+                                @if (!$admin->roles->contains('name', 'user')) <!-- Pastikan admin bukan user -->
                                     <tr class="hover:bg-slate-50 border-b border-slate-200">
                                         <td class="p-4 py-5 border">
-                                            <p class="block font-semibold text-sm text-slate-800">{{ $nomorUrut + 1 }}</p>
+                                            <p class="block font-semibold text-sm text-slate-800">{{ $nomorUrut }}</p>
                                         </td>
                                         <td class="p-4 py-5 border">
                                             <p class="text-sm text-slate-500">{{ $admin->name }}</p>
                                         </td>
                                         <td class="p-4 py-5 border">
-                                            <p class="text-sm text-slate-500">{{ $admin->nik }}</p>
+                                            <p class="text-sm text-slate-500">{{ substr_replace($admin->nik, 'xxxxxxxxxxxxxx', 0, 14) }}</p>
                                         </td>
-                                        <td class="p-4 py-5 border">
+                                                                                <td class="p-4 py-5 border">
                                             <p class="text-sm text-slate-500">{{ $admin->tempat_lahir }}</p>
                                         </td>
                                         <td class="p-4 py-5 border">
-                                            <p class="text-sm text-slate-500">{{ \Carbon\Carbon::parse($admin->tanggal_lahir)->format('d-m-Y') }}</p>
+                                            <p class="text-sm text-slate-500">xx-xx-xx{{ \Carbon\Carbon::parse($admin->tanggal_lahir)->format('y') }}</p>
                                         </td>
-                                        <td class="p-4 py-5 border">
+
+                                                                                <td class="p-4 py-5 border">
                                             <p class="text-sm text-slate-500">{{ $admin->alamat }}</p>
                                         </td>
                                         <td class="p-4 py-5 border">
                                             @foreach ($admin->roles as $role)
-                                                <p class="text-sm text-slate-500">{{ $role->name }}</p>
+                                                <p class="text-sm uppercase  text-slate-500">{{ $role->name }}</p>
                                             @endforeach
                                         </td>
-
-                                        {{-- <td class="py-2 px-4 border text-center">
-
-                                            <div class="flex justify-center space-x-2">
-                                                @include('partials.hapus', [
-                                                    'title' => 'admin',
-                                                    'url' => route('admin.destroy', $admin->id),
-                                                    'class' => 'ml-2 inline-block px-3 py-1 text-sm font-bold bg-red-500 text-white rounded hover:bg-red-600
-                                                                                                               sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300',
-                                                    'id' => $admin->id,
-                                                ]) <!-- Tombol Hapus -->
-                                            </div>
-
-                                        </td> --}}
                                     </tr>
+                                    @php
+                                        $nomorUrut++; // Tambahkan nomor urut untuk admin yang ditampilkan
+                                    @endphp
                                 @endif
                             @endforeach
                         </tbody>
+
                     </table>
                     <div class="flex justify-between items-center px-4 py-3">
                         <div class="text-sm text-slate-500">

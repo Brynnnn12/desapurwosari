@@ -19,8 +19,8 @@ class RedirectIfNotAuthenticated
     {
         // Jika pengguna belum login, arahkan ke halaman login
         if (!Auth::check()) {
-            return redirect()->route('auth.login'); // Pastikan rute login sudah terdefinisi
-        }
+
+            return redirect()->route('auth.login')->with('error', 'Anda harus login untuk mengakses halaman ini.');        }
 
         return $next($request);
     }

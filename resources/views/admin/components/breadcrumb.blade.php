@@ -1,5 +1,5 @@
 <!-- resources/views/partials/breadcrumb.blade.php -->
-<nav class="flex px-5 py-3 text-gray-700 rounded-lg  dark:bg-[#1E293B]" aria-label="Breadcrumb">
+<nav class="flex px-5 py-3 text-gray-700 rounded-lg   aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
             <a href="{{ route('admin.dashboard') }}"

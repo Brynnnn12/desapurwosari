@@ -34,12 +34,12 @@ class JenisLayananController extends Controller
     /**
      * Tampilkan form untuk membuat jenis layanan baru.
      */
-    public function create()
-    {
-        $user = Auth::user(); // Dapatkan pengguna yang terautentikasi
+    // public function create()
+    // {
+    //     $user = Auth::user(); // Dapatkan pengguna yang terautentikasi
 
-        return view('admin.jenis_layanans.create', compact('user')); // Sintaks yang benar
-    }
+    //     return view('admin.jenis_layanans.create', compact('user')); // Sintaks yang benar
+    // }
 
     /**
      * Simpan jenis layanan baru ke dalam database.
@@ -60,12 +60,12 @@ class JenisLayananController extends Controller
     /**
      * Tampilkan form untuk mengedit jenis layanan.
      */
-    public function edit($id)
-    {
-        $user = Auth::user(); // Dapatkan pengguna yang terautentikasi
-        $jenisLayanan = JenisLayanan::findOrFail($id);
-        return view('admin.jenis_layanans.edit', compact('jenisLayanan', 'user'));
-    }
+    // public function edit($id)
+    // {
+    //     $user = Auth::user(); // Dapatkan pengguna yang terautentikasi
+    //     $jenisLayanan = JenisLayanan::findOrFail($id);
+    //     return view('admin.jenis_layanans.edit', compact('jenisLayanan', 'user'));
+    // }
 
     /**
      * Update jenis layanan dalam database.

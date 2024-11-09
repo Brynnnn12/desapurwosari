@@ -18,6 +18,12 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Pastikan pengguna sudah login
+        if (!Auth::check()) {
+            return redirect('/login')->with('error', 'You must be logged in to access this page.');
+        }
+
+
         // Memeriksa apakah pengguna sudah login dan memiliki peran 'admin'
         if (Auth::check() && Auth::user()->hasRole('admin')) {
             return $next($request);
@@ -25,6 +31,6 @@ class Admin
 
         // Jika bukan admin, redirect ke halaman utama
 
-        return response()->view('error.404', ['error' => 'You do not have permission to access this page.'], 403);
+        return redirect('error.404')->with('error', 'You do not have permission to access this page.');
     }
 }

@@ -8,17 +8,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const moon = document.querySelector(".moon");
     const sun = document.querySelector(".sun");
 
-    window.setDark = function(val) {
-        if (val === "dark") {
-            document.documentElement.classList.add('dark');
-            moon.classList.add("hidden");
-            sun.classList.remove("hidden");
-        } else {
-            document.documentElement.classList.remove('dark');
-            sun.classList.add("hidden");
-            moon.classList.remove("hidden");
-        }
-    }
+    // window.setDark = function(val) {
+    //     if (val === "dark") {
+    //         document.documentElement.classList.add('dark');
+    //         moon.classList.add("hidden");
+    //         sun.classList.remove("hidden");
+    //     } else {
+    //         document.documentElement.classList.remove('dark');
+    //         sun.classList.add("hidden");
+    //         moon.classList.remove("hidden");
+    //     }
+    // }
 
     window.openNav = function() {
         if (sidebar.classList.contains('-translate-x-48')) {

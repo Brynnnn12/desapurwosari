@@ -1,15 +1,14 @@
-<div class="fixed w-full z-30 flex bg-white dark:bg-[#0F172A] p-2 items-center justify-between h-16 px-10">
+<div class="fixed w-full z-30 flex bg-white  p-2 items-center justify-between h-16 px-10">
     <div
         class="logo ml-12 dark:text-white transform ease-in-out duration-500 flex-none h-full flex items-center justify-center">
         <div class="flex justify-center">
             <img src="{{ asset('assets/images.png') }}" class="w-10 " alt="Logo">
         </div>
-        <a href="{{ route('home.app') }} "class=" font-bold font-serif">Purwosari</a>
+        <a href="{{ route('home') }} "class=" font-bold text-lg text-black  font-sans">Purwosari</a>
     </div>
 
-    <div class="grow h-full flex items-center justify-center"></div>
 
-    <div class="relative flex-none h-full text-center flex items-center justify-center bg-blue-300 rounded-lg">
+    <div class="relative flex-none h-full text-center  flex items-center justify-center bg-blue-300 rounded-lg">
         <div class="flex space-x-3 items-center px-3">
             <div class="flex-none flex justify-center">
                 <div class="w-8 h-8 flex">
@@ -19,8 +18,8 @@
                             class="shadow rounded-full object-cover cursor-pointer" id="dropdownProfileButton" />
                     @else
                         <!-- Tampilkan ikon default jika tidak ada avatar -->
-                        <span class="flex size-14 items-center justify-center overflow-hidden rounded-full border border-neutral-300 bg-neutral-50 text-neutral-600/50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300/50">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" class="w-full h-full mt-3">
+                        <span class="shadow rounded-full object-cover cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" class="w-full h-full">
                                 <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/>
                             </svg>
                         </span>
@@ -43,7 +42,7 @@
 
                 <!-- Dropdown Menu -->
                 <div id="dropdownMenu"
-                    class="absolute right-0 z-10 hidden bg-white dark:bg-gray-800 divide-y divide-gray-100 rounded-md shadow-lg mt-4 w-48 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    class="absolute right-0 z-10 hidden bg-white  divide-y divide-gray-100 rounded-md shadow-lg mt-4 w-48 ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="py-1">
                         <a href="{{ route('profile.show') }}"
                             class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">

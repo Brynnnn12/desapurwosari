@@ -16,16 +16,16 @@
         <div class="flex justify-between items-center mb-6">
             <!-- Tombol untuk menampilkan form pengaduan -->
             <button @click="open = true"
-                class="inline-block  px-2 py-1 text-sm font-bold bg-blue-500 text-white rounded hover:bg-blue-600
-                       sm:px-3 sm:py-1.5 sm:text-sm md:px-4 md:py-2 md:text-md">
+                class="inline-block  pr-4 h-8 pl-4  px-2 py-1 text-xs font-semibold sm:font-bold bg-blue-500 text-white rounded hover:bg-blue-600
+                       sm:px-3 sm:py-1.5  md:px-4 md:py-2 ">
                 Pengaduan Baru
             </button>
 
             <div class="ml-3 ">
-                <div class="w-full max-w-sm min-w-[200px] relative">
+                <div class="w-50  relative">
                     <form action="{{ route('pengaduans.index') }}" method="GET" class="flex items-center">
                         <input type="text" name="search"
-                            class="bg-white w-full pr-10 h-8 pl-2  py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-xs border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                            class="bg-white w-full pr-4 h-8 pl-2  py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-xs border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
                             placeholder="Cari pengaduan..." value="{{ request()->get('search') }}" />
                         <button type="submit"
                             class="absolute h-6 w-6 right-2 top-1.5 my-auto flex items-center justify-center bg-white rounded">
@@ -116,15 +116,10 @@
                                     <td class="p-4 py-5">
                                         <p class="text-sm text-slate-500">
                                             @if ($pengaduan->user && $pengaduan->user->tanggal_lahir)
-                                                @php
-                                                    $birthDate = new \Carbon\Carbon($pengaduan->user->tanggal_lahir);
-                                                    $age = $birthDate->diffInYears(now());
-                                                    $month = $birthDate->diffInMonths(now()) % 12; // Mengambil sisa bulan setelah tahun
-                                                @endphp
-                                                {{ $age }} tahun {{ $month }} bulan
-                                            @else
-                                                Tidak tersedia
-                                            @endif
+                                            {{ Carbon\Carbon::parse($pengaduan->user->tanggal_lahir)->age }} Tahun
+                                        @else
+                                            Tidak tersedia
+                                        @endif
                                         </p>
                                     </td>
                                     <td class="p-4 py-5">
@@ -132,17 +127,17 @@
                                             {{ $pengaduan->user ? $pengaduan->user->alamat : 'Alamat tidak ditemukan' }}
                                         </p>
                                     </td>
+                                    @if (auth()->user()->hasRole('admin'))
+
                                     <td class="py-2 px-4 border text-center">
                                         <div class="flex justify-center space-x-2">
                                             <div class="flex justify-between">
                                                 <!-- Cek apakah pengguna adalah admin -->
-                                                @if (auth()->user()->hasRole('admin'))
                                                     <!-- Tombol untuk menampilkan form edit pengaduan -->
                                                     <button
                                                         @click="edit = true; pengaduan.isi = '{{ $pengaduan->isi_aduan }}'; pengaduan.id = {{ $pengaduan->id }}"
                                                         aria-label="Edit"
-                                                        class="inline-block px-3 py-1 text-sm font-bold bg-yellow-500 text-white rounded hover:bg-yellow-600
-                       sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300">
+                                                        class="inline-block px-4 py-1 text-sm font-bold bg-yellow-500 text-white rounded hover:bg-yellow-600">
                                                         Edit
                                                     </button>
 
@@ -150,13 +145,14 @@
                                                         'title' => 'Pengaduan',
                                                         'url' => route('pengaduans.destroy', $pengaduan->id),
                                                         'class' => 'ml-2 inline-block px-3 py-1 text-sm font-bold bg-red-500 text-white rounded hover:bg-red-600
-                                                                                sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 transition duration-300',
                                                         'id' => $pengaduan->id, // Kirimkan ID di sini
                                                     ])
-                                                @endif
                                             </div>
 
                                     </td>
+                                    @endif
+
                                 </tr>
                             @endforeach
                         </tbody>

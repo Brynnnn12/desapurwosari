@@ -1,5 +1,11 @@
 import './bootstrap';
+
 import Alpine from 'alpinejs';
+import intersect from '@alpinejs/intersect'
+import 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+Alpine.plugin(intersect)
 
 window.Alpine = Alpine;
 
