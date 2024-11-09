@@ -11,9 +11,9 @@
                     @if($user->avatar)
                         <!-- Tampilkan gambar avatar jika tersedia -->
                         <img src="{{ Storage::url($user->avatar) }}" alt="Avatar"
-    class="w-32 h-32 rounded-full border border-gray-300 mb-4 object-cover">
-
-                    @else
+                             class="w-32 h-32 rounded-full border border-gray-300 mb-4 object-cover cursor-pointer"
+                             @click="buka = true; image = '{{ asset('storage/' . $user->avatar) }}'" />
+                             @else
                         <!-- Tampilkan ikon default jika tidak ada avatar -->
                         <span class="flex size-14 items-center justify-center overflow-hidden rounded-full border border-neutral-300 bg-neutral-50 text-neutral-600/50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300/50">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" class="w-32 h-32 mt-3">
@@ -90,6 +90,11 @@
                                 'ml-2 text-white font-semibold px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 ',
                                 'id' => $user->id, // Kirimkan ID di sini
                         ])
+                </div>
+
+                <div x-show="buka" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" @click.away="buka = false">
+                    <img :src="image" alt="Avatar" class=" flex items-center w-50  rounded-full border border-gray-300 mb-4 object-cover cursor-pointer" @click.stop />
+                    <button class="absolute top-5 right-5 text-white" @click="buka = false">X</button>
                 </div>
 
 

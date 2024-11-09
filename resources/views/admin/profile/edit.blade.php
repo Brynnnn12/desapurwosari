@@ -16,11 +16,15 @@
                             reader.onload = (e) => { avatar = e.target.result };
                             reader.readAsDataURL($event.target.files[0]);
                         }">
-                        <button type="button" class="text-red-500 mt-2" @click="avatar = 'https://via.placeholder.com/150'; $refs.avatarInput.value = '';" x-show="avatar !== 'https://via.placeholder.com/150'">
+                        <!-- Modal for displaying the clicked image -->
+
+                        <!-- Hidden input to mark if the avatar should be deleted -->
+                        <input type="hidden" name="delete_avatar" x-bind:value="avatar === 'https://via.placeholder.com/150' ? 1 : 0">
+
+                        <button type="button" class="text-red-500 mt-2" @click="avatar = 'https://via.placeholder.com/150'; $refs.avatarInput.value = ''; $refs.deleteInput.value = 1;" x-show="avatar !== 'https://via.placeholder.com/150'" x-ref="deleteInput">
                             Hapus Gambar
                         </button>
                     </div>
-
 
                     <div class="mb-4">
                         <label for="name" class="block text-sm font-medium text-gray-700">Nama</label>
@@ -146,7 +150,7 @@
 
 
 
-                    @if ($errors->any())
+                    {{-- @if ($errors->any())
                         <div class="mt-4 text-red-600">
                             <ul>
                                 @foreach ($errors->all() as $error)
@@ -160,7 +164,7 @@
                         <div class="mt-4 text-green-600">
                             {{ session('success') }}
                         </div>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
         </form>

@@ -15,31 +15,40 @@ class SuratPengantarController extends Controller
 
     // Menampilkan semua surat pengantar
     public function index(Request $request)
-    {
-        // Mendapatkan pengguna yang terautentikasi
-        $user = Auth::user();
+{
+    // Mendapatkan pengguna yang terautentikasi
+    $user = Auth::user();
 
-        // Mendapatkan semua jenis layanan
-        $jenisLayanans = JenisLayanan::all();
+    // Mendapatkan semua jenis layanan
+    $jenisLayanans = JenisLayanan::all();
 
-        // Mengambil input pencarian dari request
-        $search = $request->input('search');
+    // Mengambil input pencarian dari request
+    $search = $request->input('search');
 
-        // Query untuk mengambil data surat pengantar beserta jenis layanannya
-        $suratPengantars = SuratPengantar::with('jenisLayanan')
-            ->when($search, function ($query, $search) {
-                // Filter pencarian berdasarkan nomor surat, nama user, atau NIK
-                return $query->where('nomor_surat', 'like', '%' . $search . '%')
-                    ->orWhereHas('user', function ($q) use ($search) {
-                        $q->where('name', 'like', '%' . $search . '%')
-                            ->orWhere('nik', 'like', '%' . $search . '%');
-                    });
-            })
-            ->paginate(10); // Paginasi 10 item per halaman
+    // Query untuk mengambil data surat pengantar
+    $suratPengantars = SuratPengantar::with('jenisLayanan')
+        ->when($search, function ($query) use ($search) {
+            // Filter pencarian berdasarkan nomor surat, nama user, atau NIK
+            return $query->where('nomor_surat', 'like', '%' . $search . '%')
+                ->orWhereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('nik', 'like', '%' . $search . '%');
+                });
+        });
 
-        // Mengirimkan data ke view
-        return view('admin.surat_pengantars.index', compact('suratPengantars', 'jenisLayanans', 'user'));
+    // Cek apakah pengguna adalah admin
+    if ($user->hasRole('admin')) {
+        // Jika admin, ambil semua surat pengantar
+        $suratPengantars = $suratPengantars->paginate(10); // Paginasi 10 item per halaman
+    } else {
+        // Jika bukan admin, ambil surat pengantar hanya yang diajukan oleh user yang sedang login
+        $suratPengantars = $suratPengantars->where('user_id', $user->id)->paginate(10); // Paginasi 10 item per halaman
     }
+
+    // Mengirimkan data ke view
+    return view('admin.surat_pengantars.index', compact('suratPengantars', 'jenisLayanans', 'user'));
+}
+
 
 
     // Menampilkan form untuk membuat surat pengantar baru

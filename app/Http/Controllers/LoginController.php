@@ -30,7 +30,7 @@ class LoginController extends Controller
         // Cek apakah autentikasi berhasil
         if (Auth::attempt($credentials)) {
             // Jika berhasil, redirect ke dashboard
-            return redirect()->route('admin.dashboard')->with('success', 'Login berhasil!');
+            return redirect()->route('home.app')->with('success', 'Login berhasil!');
         } else {
             // Jika gagal, redirect kembali ke halaman login dengan pesan error
             return redirect()->route('auth.login')->with('error', 'Login Gagal!');
@@ -46,24 +46,28 @@ class LoginController extends Controller
 
     // Memproses registrasi
     public function register_proses(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'name' => 'required|string|max:50',
-            'email' => 'required|email|unique:users', // Email harus unik
-            'password' => 'required|string|min:6|confirmed', // Password harus diisi, minimal 6 karakter, dan sama dengan konfirmasi
-        ]);
+{
+    // Validasi input
+    $request->validate([
+        'name' => 'required|string|max:50',
+        'email' => 'required|email|unique:users', // Email harus unik
+        'password' => 'required|string|min:6|confirmed', // Password harus diisi, minimal 6 karakter, dan sama dengan konfirmasi
+    ]);
 
-        // Membuat pengguna baru
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password), // Hash password
-        ]);
+    // Membuat pengguna baru
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password), // Hash password
+    ]);
 
-        // Redirect setelah registrasi berhasil
-        return redirect('login')->with('success', 'Registrasi berhasil! Silakan login.');
-    }
+    // Tetapkan role "user" ke pengguna yang baru dibuat
+    $user->assignRole('user');
+
+    // Redirect setelah registrasi berhasil
+    return redirect('login')->with('success', 'Registrasi berhasil! Silakan login.');
+}
+
 
     // Logout pengguna
     public function logout()

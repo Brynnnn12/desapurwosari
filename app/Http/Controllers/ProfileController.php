@@ -52,6 +52,7 @@ class ProfileController extends Controller
         }
 
 
+
         // Mengupdate atribut pengguna
         $user->name = $request->name;
         $user->email = $request->email;
@@ -64,7 +65,11 @@ class ProfileController extends Controller
         $user->tempat_lahir = $request->tempat_lahir;
         $user->tanggal_lahir = $request->tanggal_lahir;
 
+
+
         // Cek jika ada avatar yang diupload
+    // Cek apakah ada file avatar yang diupload
+    // Mengganti avatar jika ada
     if ($request->hasFile('avatar')) {
         // Hapus avatar lama jika ada
         if ($user->avatar) {
@@ -75,9 +80,18 @@ class ProfileController extends Controller
         $cleanedName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $user->name);
 
         // Menggunakan storeAs untuk mengubah nama file
-        $avatarName = 'Profil_' . $cleanedName . '_' . $user->id . '.' . $request->file('avatar')->getClientOriginalExtension(); // Menggunakan user ID untuk membuat nama file unik
+        $avatarName = 'Profil_' . $cleanedName . '_' . $user->id . '.' . $request->file('avatar')->getClientOriginalExtension();
         $avatarPath = $request->file('avatar')->storeAs('avatars', $avatarName, 'public');
-        $user->avatar = $avatarPath;
+        $user->avatar = $avatarPath; // Menyimpan path file avatar baru
+    }
+
+    // Cek apakah pengguna ingin menghapus avatar
+    if ($request->input('delete_avatar') == 1) {
+        // Hapus avatar lama jika ada
+        if ($user->avatar) {
+            Storage::disk('public')->delete($user->avatar);
+            $user->avatar = null; // Atur ulang ke null jika dihapus
+        }
     }
 
 
@@ -106,6 +120,8 @@ class ProfileController extends Controller
         if ($user->avatar) {
             Storage::disk('public')->delete($user->avatar);
         }
+
+
 
         // Delete the user
         $user->delete();

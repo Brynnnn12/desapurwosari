@@ -27,6 +27,9 @@
 
     },
     suratPengantar: {},
+    roleName: {  },
+    permission: {},
+
     buka: false,
     image: ''
 
@@ -59,15 +62,15 @@
     @vite('resources/js/sidebar.js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
-            new TomSelect('#select-role', {
+            // Inisialisasi Tom Select
+            const tomSelectInstance = new TomSelect('#select-role', {
                 maxItems: 3, // Set max number of selections if needed
                 placeholder: 'Select roles...',
-                // Add any additional configuration you want here
             });
         });
-    </script>
+    </script> --}}
 
 
 </body>

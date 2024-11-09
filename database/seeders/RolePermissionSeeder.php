@@ -37,12 +37,12 @@ class RolePermissionSeeder extends Seeder
             }
 
             // Buat role admin
-            $adminRole = Role::firstOrCreate(['name' => 'admin']);
+            $adminRole = Role::firstOrCreate(['name' => 'Admin']);
             // Assign semua permissions ke role admin
             $adminRole->givePermissionTo(Permission::all());
 
             // Buat role user
-            $userRole = Role::firstOrCreate(['name' => 'user']);
+            $userRole = Role::firstOrCreate(['name' => 'User']);
             // Assign permissions yang relevan ke role user
             $userRole->givePermissionTo([
                 'view_surat_pengantar',
@@ -54,11 +54,11 @@ class RolePermissionSeeder extends Seeder
             // Assign role admin ke user dengan ID 1
             $user = User::find(1); // Ganti dengan ID pengguna yang ingin Anda ubah
             if ($user) {
-                $user->assignRole('admin');
+                $user->assignRole('Admin');
             }
             $user = User::find(9); // Ganti dengan ID pengguna yang ingin Anda ubah
             if ($user) {
-                $user->assignRole('user');
+                $user->assignRole('User');
             }
         });
     }

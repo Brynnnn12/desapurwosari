@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class JenisLayananController extends Controller
 {
+
     // * Tampilkan daftar jenis layanan.
     //  */
     public function index(Request $request)

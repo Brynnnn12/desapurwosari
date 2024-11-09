@@ -13,7 +13,6 @@
             <h3 class="text-xl text-center font-bold text-slate-800">Daftar Permissions</h3>
         </div>
 
-
         <div class="w-full flex justify-between items-center mb-3 mt-1 pl-3">
             <div>
                 <button @click="open = true"
@@ -22,9 +21,6 @@
                 </button>
             </div>
         </div>
-
-
-
 
         @if ($permissions->isEmpty())
             <div class="p-4 text-blue-700 bg-blue-100 border border-blue-300 rounded">
@@ -48,8 +44,7 @@
                                 <td class="p-4">{{ $permission->name }}</td>
                                 <td class="p-4 text-center">
                                     <div class="flex justify-center space-x-2">
-                                        <button
-                                            @click="edit = true; permission = { id: {{ $permission->id }}, name: '{{ $permission->name }}' }"
+                                        <button @click="edit = true; permission = @js($permission)"
                                             class="px-3 py-1 text-sm text-white bg-yellow-500 rounded hover:bg-yellow-600">
                                             Edit
                                         </button>
@@ -79,16 +74,15 @@
             </div>
         @endif
 
-
-
     </div>
+
     {{-- Form untuk tambah role --}}
     <!-- Overlay -->
     <div x-show="open" x-transition:enter="transition ease-out duration-300"
         x-transition:leave="transition ease-in duration-200" class="fixed inset-0 bg-black bg-opacity-50 z-50"
         @click="open = false"></div>
 
-    <!-- Popup Form -->
+    <!-- Popup Form Tambah -->
     <div x-show="open" x-transition:enter="transition ease-out duration-300 transform"
         x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-200 transform" x-transition:leave-start="opacity-100 translate-y-0"
@@ -111,7 +105,11 @@
                 <div class="mb-4">
                     <label for="roles" class="block text-sm font-semibold text-slate-700">Pilih Role</label>
                     <select id="select-role" name="roles[]" multiple placeholder="Pilih role..."
-                        class="block w-full rounded-sm cursor-pointer focus:outline-none" autocomplete="off">
+                        class="block w-full rounded-sm cursor-pointer focus:outline-none" autocomplete="off"
+                        x-init="new TomSelect($el, {
+                            maxItems: 3,
+                            placeholder: 'Select roles...',
+                        })">
                         @foreach ($roles as $role)
                             <option value="{{ $role->name }}">{{ $role->name }}</option>
                         @endforeach
@@ -140,5 +138,93 @@
         </div>
     </div>
 
+    <!-- Popup Form Edit -->
+    <div x-show="edit" x-transition:enter="transition ease-out duration-300 transform"
+        x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200 transform" x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-4"
+        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-xs sm:max-w-xl ml-10">
+            <h4 class="text-lg font-bold text-gray-800">Edit Permission</h4>
+            <form action="{{ route('permissions.update', $permission->id) }}" method="POST">
+                @csrf
+                @method('PUT') <!-- This is crucial for sending a PUT request -->
+                <div class="mb-4">
+                    <label for="edit_permission" class="block text-sm font-semibold text-gray-700">Nama Permission</label>
+                    <input type="text" name="permission" id="edit_permission"
+                        value="{{ old('permission', $permission->name) }}"
+                        class="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-500"
+                        placeholder="Masukkan nama permission" required>
 
+                    @error('permission')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="roles" class="block text-sm font-semibold text-slate-700">Pilih Role</label>
+                    <select id="select-role" name="roles[]" multiple placeholder="Pilih role..."
+                        class="block w-full rounded-sm cursor-pointer focus:outline-none" autocomplete="off"
+                        x-init="new TomSelect($el, {
+                            maxItems: 3,
+                            placeholder: 'Select roles...',
+                        })">
+                        @foreach ($roles as $role)
+                            <option value="{{ $role->id }}" {{ $permission->hasRole($role->name) ? 'selected' : '' }}>
+                                {{ $role->name }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    @error('roles')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+                {{-- <div>
+                    <label for="permission">Permission:</label>
+                    <input type="text" name="permission" value="{{ old('permission', $permission->name) }}" required>
+                </div>
+
+                <div>
+                    <label for="roles">Roles:</label>
+                    <select name="roles[]" multiple>
+                        @foreach ($roles as $role) <!-- Assuming you have roles passed to the view -->
+                            <option value="{{ $role->id }}" {{ $permission->hasRole($role->name) ? 'selected' : '' }}>
+                                {{ $role->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div> --}}
+
+                <div class="flex gap-2">
+                    <div class="mt-2 bg-green-500 rounded-lg">
+                        <button type="submit"
+                            class="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                            Simpan
+                        </button>
+                    </div>
+                    <div class="mt-2 bg-red-500 rounded-lg">
+                        <button type="button" @click="edit = false"
+                            class="inline-block px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                            Batal
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
 @endsection
+
+{{-- @section('script')
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('permission', () => ({
+                open: false,
+                edit: false,
+                permission: {},
+
+            }))
+        })
+    </script>
+@endsection --}}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Pengaduan;
 use Illuminate\Http\Request;
@@ -12,26 +13,51 @@ class PengaduanController extends Controller
 {
     // Menampilkan daftar pengaduan
     public function index(Request $request)
-    {
-        $user = Auth::user(); // Dapatkan pengguna yang terautentikasi
+{
+    $user = Auth::user(); // Dapatkan pengguna yang terautentikasi
 
-        $query = $request->get('search');
-        $pengaduans = Pengaduan::with('user')
-            ->when($query, function ($queryBuilder) use ($query) {
-                return $queryBuilder->where('isi_aduan', 'like', "%{$query}%")
-                    ->orWhereHas('user', function ($userQuery) use ($query) {
-                        $userQuery->where('name', 'like', "%{$query}%");
-                    });
-            })
-            ->paginate(10);
+    // Hitung umur pengguna
+    $umur = $user->tanggal_lahir ? Carbon::parse($user->tanggal_lahir)->age : null;
 
-        return view('admin.pengaduans.index', compact('pengaduans', 'user'));
+    // Ambil bulan sekarang
+    $bulanSekarang = Carbon::now()->locale('id')->translatedFormat('F'); // Nama bulan dalam bahasa Indonesia
+
+    $query = $request->get('search');
+    $pengaduans = Pengaduan::with('user')
+        ->when($query, function ($queryBuilder) use ($query) {
+            return $queryBuilder->where('isi_aduan', 'like', "%{$query}%")
+                ->orWhereHas('user', function ($userQuery) use ($query) {
+                    $userQuery->where('name', 'like', "%{$query}%");
+                });
+        });
+
+    // Cek apakah pengguna adalah admin
+    if ($user->hasRole('admin')) {
+        // Jika admin, ambil semua pengaduan
+        $pengaduans = $pengaduans->paginate(10); // Paginasi 10 item per halaman
+    } else {
+        // Jika bukan admin, ambil pengaduan hanya yang diajukan oleh user yang sedang login
+        $pengaduans = $pengaduans->where('user_id', $user->id)->paginate(10); // Paginasi 10 item per halaman
     }
+
+    return view('admin.pengaduans.index', compact('pengaduans', 'user', 'umur', 'bulanSekarang'));
+}
+
 
     // Menampilkan form untuk membuat pengaduan baru
     public function create()
     {
         $user = Auth::user(); // Dapatkan pengguna yang terautentikasi
+
+         // Hitung umur
+    $umur = null;
+    if ($user->tanggal_lahir) {
+        $umur = Carbon::parse($user->tanggal_lahir)->age; // Menghitung umur
+    }
+
+    // Ambil bulan sekarang
+    $bulanSekarang = Carbon::now()->locale('id')->translatedFormat('F'); // Nama bulan dalam bahasa Indonesia
+
         return view('admin.pengaduans.create', compact('user'));
     }
 

@@ -79,8 +79,16 @@
                                     <p class="text-sm font-bold leading-none text-slate-500">Gambar</p>
                                 </th>
                                 <th class="p-4 border-b border-slate-200 bg-slate-50">
-                                    <p class="text-sm font-bold text-center leading-none text-slate-500">Aksi</p>
+                                    <p class="text-sm font-bold leading-none text-slate-500">Umur</p>
                                 </th>
+                                <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                    <p class="text-sm font-bold leading-none text-slate-500">Alamat</p>
+                                </th>
+                                @if (auth()->user()->hasRole('admin'))
+                                    <th class="p-4 border-b border-slate-200 bg-slate-50">
+                                        <p class="text-sm font-bold text-center leading-none text-slate-500">Aksi</p>
+                                    </th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -98,31 +106,54 @@
                                     </td>
                                     <td class="p-4 py-5">
                                         @if ($pengaduan->gambar)
-                                            <img src="{{ asset('storage/' . $pengaduan->gambar) }}" alt="Gambar Pengaduan" class="w-20 h-20 object-cover rounded cursor-pointer"
-                                                 @click="buka = true; image = '{{ asset('storage/' . $pengaduan->gambar) }}'" />
+                                            <img src="{{ asset('storage/' . $pengaduan->gambar) }}" alt="Gambar Pengaduan"
+                                                class="w-20 h-20 object-cover rounded cursor-pointer"
+                                                @click="buka = true; image = '{{ asset('storage/' . $pengaduan->gambar) }}'" />
                                         @else
                                             <p class="text-sm text-slate-500">Tidak ada gambar</p>
                                         @endif
                                     </td>
+                                    <td class="p-4 py-5">
+                                        <p class="text-sm text-slate-500">
+                                            @if ($pengaduan->user && $pengaduan->user->tanggal_lahir)
+                                                @php
+                                                    $birthDate = new \Carbon\Carbon($pengaduan->user->tanggal_lahir);
+                                                    $age = $birthDate->diffInYears(now());
+                                                    $month = $birthDate->diffInMonths(now()) % 12; // Mengambil sisa bulan setelah tahun
+                                                @endphp
+                                                {{ $age }} tahun {{ $month }} bulan
+                                            @else
+                                                Tidak tersedia
+                                            @endif
+                                        </p>
+                                    </td>
+                                    <td class="p-4 py-5">
+                                        <p class="text-sm text-slate-500">
+                                            {{ $pengaduan->user ? $pengaduan->user->alamat : 'Alamat tidak ditemukan' }}
+                                        </p>
+                                    </td>
                                     <td class="py-2 px-4 border text-center">
                                         <div class="flex justify-center space-x-2">
                                             <div class="flex justify-between">
-                                                <!-- Tombol untuk menampilkan form edit pengaduan -->
-                                                <button
-                                                    @click="edit = true; pengaduan.isi = '{{ $pengaduan->isi_aduan }}' ; pengaduan.id = {{ $pengaduan->id }}"
-                                                    aria-label="Edit"
-                                                    class="inline-block px-3 py-1 text-sm font-bold bg-yellow-500 text-white rounded hover:bg-yellow-600
-                                                       sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300">
-                                                    Edit
-                                                </button>
+                                                <!-- Cek apakah pengguna adalah admin -->
+                                                @if (auth()->user()->hasRole('admin'))
+                                                    <!-- Tombol untuk menampilkan form edit pengaduan -->
+                                                    <button
+                                                        @click="edit = true; pengaduan.isi = '{{ $pengaduan->isi_aduan }}'; pengaduan.id = {{ $pengaduan->id }}"
+                                                        aria-label="Edit"
+                                                        class="inline-block px-3 py-1 text-sm font-bold bg-yellow-500 text-white rounded hover:bg-yellow-600
+                       sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300">
+                                                        Edit
+                                                    </button>
 
-                                                @include('partials.hapus', [
-                                                    'title' => 'Pengaduan',
-                                                    'url' => route('pengaduans.destroy', $pengaduan->id),
-                                                    'class' => 'ml-2 inline-block px-3 py-1 text-sm font-bold bg-red-500 text-white rounded hover:bg-red-600
-                                                                                                                                                    sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300',
-                                                    'id' => $pengaduan->id, // Kirimkan ID di sini
-                                                ])
+                                                    @include('partials.hapus', [
+                                                        'title' => 'Pengaduan',
+                                                        'url' => route('pengaduans.destroy', $pengaduan->id),
+                                                        'class' => 'ml-2 inline-block px-3 py-1 text-sm font-bold bg-red-500 text-white rounded hover:bg-red-600
+                                                                                sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300',
+                                                        'id' => $pengaduan->id, // Kirimkan ID di sini
+                                                    ])
+                                                @endif
                                             </div>
 
                                     </td>
@@ -149,7 +180,8 @@
         @include('admin.pengaduans.edit')
     @endif
 
-    <div x-show="buka" @click.away="buka = false" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70" x-transition>
+    <div x-show="buka" @click.away="buka = false"
+        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70" x-transition>
         <img :src="image" alt="Gambar Pengaduan" class="max-w-md max-h-full" @click="buka = false" />
     </div>
 

@@ -77,16 +77,21 @@
                                 <th class="p-4 border border-slate-200 bg-slate-50">
                                     <p class="text-sm font-bold leading-none text-slate-500">Berkas Pendukung</p>
                                 </th>
+                                @if(auth()->user()->hasRole('admin'))
+
                                 <th class="p-4 border border-slate-200 bg-slate-50">
                                     <p class="text-sm font-bold leading-none text-slate-500">Dokumen</p>
                                 </th>
-
+                                @endif
                                 <th class="p-4 border border-slate-200 bg-slate-50">
                                     <p class="text-sm font-bold text-center leading-none text-slate-500">Status</p>
                                 </th>
+                                @if(auth()->user()->hasRole('admin'))
+
                                 <th class="p-4 border border-slate-200 bg-slate-50">
                                     <p class="text-sm font-bold text-center leading-none text-slate-500">Aksi</p>
                                 </th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -115,6 +120,7 @@
                                     <td class="p-4 py-5 border">
                                         <p class="text-sm text-slate-500">{{ $suratPengantar->berkas_pendukung }}</p>
                                     </td>
+                                    @if(auth()->user()->hasRole('admin'))
 
                                     <td class="p-4 py-5 border">
                                         <p class="text-sm text-slate-500">
@@ -128,6 +134,7 @@
                                             @endif
                                         </p>
                                     </td>
+                                    @endif
 
                                     <td class="p-4 py-5 border flex justify-center">
                                         @if ($suratPengantar->status === 'disetujui')
@@ -154,6 +161,7 @@
                                         @endif
                                     </td>
 
+                                    @if(auth()->user()->hasRole('admin'))
 
                                     <td class="py-2 px-4 border text-center">
                                         <div class="flex justify-center space-x-2">
@@ -181,6 +189,7 @@
                                         </div>
 
                                     </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

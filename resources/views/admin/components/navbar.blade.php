@@ -4,7 +4,7 @@
         <div class="flex justify-center">
             <img src="{{ asset('assets/images.png') }}" class="w-10 " alt="Logo">
         </div>
-        <a href="{{ route('admin.dashboard') }} "class=" font-bold font-serif">Purwosari</a>
+        <a href="{{ route('home.app') }} "class=" font-bold font-serif">Purwosari</a>
     </div>
 
     <div class="grow h-full flex items-center justify-center"></div>

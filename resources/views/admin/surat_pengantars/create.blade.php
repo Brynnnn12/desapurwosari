@@ -17,7 +17,7 @@
             @csrf
             <div class="mb-4">
                 <label for="nama" class="block text-gray-700">Nama</label>
-                <input type="text" id="nama" name="nama" value="{{ auth()->user()->name }}"
+                <input type="text" id="nama" name="nama" value="{{ auth()->check() ? auth()->user()->name : '' }}"
                     class="w-full p-2 border border-gray-300 rounded" readonly>
                 @error('nama')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -26,7 +26,7 @@
 
             <div class="mb-4">
                 <label for="nik" class="block text-gray-700">NIK</label>
-                <input type="text" id="nik" name="nik" value="{{ auth()->user()->nik }}"
+                <input type="text" id="nik" name="nik"value="{{ auth()->check() ? auth()->user()->nik : '' }}"
                     class="w-full p-2 border border-gray-300 rounded" readonly>
                 @error('nik')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -34,7 +34,6 @@
             </div>
 
 
-            <!-- Nomor Surat otomatis, tidak perlu input -->
 
             <div class="mb-4">
                 <label for="jenis_layanan_id" class="block text-gray-700">Jenis Layanan</label>

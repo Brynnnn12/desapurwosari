@@ -29,11 +29,10 @@
                     <label for="roles" class="block text-sm font-bold text-gray-700">Nama Role</label>
                     <input type="text" name="name" id="roles" required class="border border-slate-200 rounded px-2 py-1 w-full" placeholder="Masukkan nama role">
                 </div>
-                <div class="flex justify-end">
                     <button type="submit" class="inline-block px-3 py-1 text-sm font-bold bg-green-500 text-white rounded hover:bg-green-600">
                         Simpan
                     </button>
-                </div>
+
             </form>
         </div>
 
@@ -43,7 +42,6 @@
             </div>
         @else
             <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 shadow-md rounded-lg bg-clip-border">
-
                 <table class="w-full text-left table-auto min-w-max">
                     <thead>
                         <tr>
@@ -70,14 +68,23 @@
                                 </td>
                                 <td class="py-2 px-4 border text-center">
                                     <div class="flex justify-center space-x-2">
-
+                                        {{-- Tombol Edit --}}
+                                        <button
+                @click="
+                    edit = true;
+                    roleId = {{ $role->id }};
+                    roleName = '{{ $role->name }}';
+                "
+                class="inline-block px-3 py-1 text-sm font-bold bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                Edit
+            </button>
 
                                         @include('partials.hapus', [
                                             'title' => 'Role',
                                             'url' => route('roles.destroy', $role->id),
                                             'class' => 'ml-2 inline-block px-3 py-1 text-sm font-bold bg-red-500 text-white rounded hover:bg-red-600
-                                                                                                                                                                                                            sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300',
-                                            'id' => $role->id, // Kirimkan ID di sini
+                                                        sm:px-4 sm:py-2 sm:text-sm md:px-5 md:py-2 md:text-base lg:px-6 lg:py-2 lg:text-base transition duration-300',
+                                            'id' => $role->id,
                                         ])
                                     </div>
                                 </td>
@@ -87,6 +94,12 @@
                 </table>
             </div>
         @endif
+
+
     </div>
+    @if (isset($role))
+        @include('admin.authorize.roles.edit')
+    @endif
+
 
 @endsection
